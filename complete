@@ -1,0 +1,18 @@
+import requests
+URL="https://api.ooyala.com/v3/analytics/reports/?report_type=performance&dimensions=asset&start_date={}&time_segment=day&end_date={}&api_key=J0MTUxOtPDJVNZastij14_v7VDRS.4ViBg&expires=1515064666&signature=7St2BN8ofQ6LS0u5F5TtpI9y9TJ9gmTmhFBMFs5SgYs&format=fmt"
+results =[]
+for year in xrange(2014, 2017):
+    for month in  xrange(1,12):
+        for day in xrange(1,31,2):
+            print(str(month) + "-" + str(year) +"-"+ str(day))
+            results += requests.get(URL.format(str(year)+"-"+str(month)+"-"+str(day),str(year)+"-"+str(month)+"-"+str(day+1)),headers={"cookie":"gsScrollPos-1160=; gsScrollPos-1762=0; gsScrollPos-1774=0; gsScrollPos-1782=0; gsScrollPos-1912=; gsScrollPos-516=0; _ga=GA1.2.1448926640.1514818734; _gid=GA1.2.292841123.1514818734; locale=en_US; login=fandom-engineers%40wikia-inc.com; now-joyride=1; bi-joyride=1; _mkto_trk=id:447-EQK-225&token:_mch-ooyala.com-1514911311793-48357; ei_client_id=5a4bb65049d6a300166af8c5; backjax_token=J0MTUxOtPDJVNZastij14_v7VDRS.4ViBg%3A%3AzAnXSG3%2F3iAF5MmkNEEiBRXPyRYjHaH0G7h3vKMOPSY; backjax_impersonate_expire=P%2Fbn%2B%2BocC1ZbBNPE%2Fbon8I1cDvm0V9dj%2BeOPVihGs%2Fc%3D%0A"}).json()["results"]
+import csv
+with open('ooyalareport.csv', 'wb') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',',
+                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for row in results:
+        data=row["data"][0]
+        spamwriter.writerow([
+            data["group"]["asset"],
+            data["metrics"]["displays"]
+        ])
